@@ -1,5 +1,11 @@
-class Bottles
+class Integer
+  def to_bottle_number
+    BottleNumber.for(self)
+  end
+end
 
+
+class Bottles
   def song
     verses(99, 0)
   end
@@ -9,16 +15,20 @@ class Bottles
   end
 
   def verse(number)
-    bottle_number = bottle_number_for(number)
-    next_bottle_number = bottle_number_for(bottle_number.successor)
+    bottle_number = BottleNumber.for(number)
 
     "#{bottle_number} of beer on the wall, ".capitalize +
     "#{bottle_number} of beer.\n" +
     "#{bottle_number.action}, " +
-    "#{next_bottle_number} of beer on the wall.\n"
+    "#{bottle_number.successor} of beer on the wall.\n"
   end
+end
 
-  def bottle_number_for(number)
+
+class BottleNumber
+  attr_reader :number
+
+  def self.for(number)
     case number
     when 0
       BottleNumber0
@@ -28,11 +38,6 @@ class Bottles
       BottleNumber
     end.new(number)
   end
-end
-
-
-class BottleNumber
-  attr_reader :number
 
   def initialize(number)
     @number = number
@@ -59,7 +64,7 @@ class BottleNumber
   end
 
   def successor
-    number - 1
+    (number - 1).to_bottle_number
   end
 end
 
@@ -74,7 +79,7 @@ class BottleNumber0 < BottleNumber
   end
 
   def successor
-    99
+    99.to_bottle_number
   end
 end
 
